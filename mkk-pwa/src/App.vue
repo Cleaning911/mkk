@@ -6,11 +6,11 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, ref, toRefs, watch} from "vue";
+import {onMounted,toRefs, watch} from "vue";
 import {useUserStore} from "./stores/userStore.ts";
 import {useRouter} from "vue-router";
 import Splash from "./views/splash.vue";
-import {ROUTE_NAME_LOGIN, ROUTE_NAME_WORK_JOURNAL, routes} from "./routes.ts";
+import {ROUTE_NAME_LOGIN, ROUTE_NAME_WORK_JOURNAL} from "./routes.ts";
 const { isAuth, getShowSplash } = toRefs(useUserStore())
 const { init } = useUserStore()
 const router = useRouter()
@@ -21,7 +21,7 @@ const checkAuthAndRedirect = () => {
       name: ROUTE_NAME_LOGIN
     })
   } else {
-    routes.push({
+    router.push({
       name: ROUTE_NAME_WORK_JOURNAL
     })
   }

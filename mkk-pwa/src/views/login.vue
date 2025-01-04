@@ -4,7 +4,7 @@
     <h4>Вход для МКК</h4>
     <div class="login__content">
       <input-phone v-show="isInputPhoneVisible" :value="phone" @change="handlePhoneChange" />
-      <input-pin v-if="isInputPinVisible" @completed="handlePinCompleted" />
+      <input-pin v-model="pin" v-if="isInputPinVisible" @completed="handlePinCompleted" />
       <button-default v-if="isInputPhoneVisible" :disabled="!!errorMessage" @click="handleClickNext">Далее</button-default>
       <error-text v-if="errorMessage">{{ errorMessage }}</error-text>
       <info-text v-if="isInputPinVisible && !isAllowResendPIN">
@@ -24,7 +24,7 @@ import {PinInput} from "v-pin-input";
 
 const STEP_INPUT_PHONE = 1
 const STEP_INPUT_PIN = 2
-const PIN_RESEND_TIMEOUT = 10
+const PIN_RESEND_TIMEOUT = 300
 
 import WebStorage from "../stores/webStorage.ts";
 import InputPhone from "../components/input/phone.vue";
@@ -40,6 +40,12 @@ import "./login.vue";
 import InfoText from "../components/info/text.vue";
 import TimerCountdown from "../components/timer/countdown.vue";
 import DateService from "../services/date-service.ts";
+import AuthService from "../api/auth-service.ts";
+import {useRouter} from "vue-router";
+import {ROUTE_NAME_WORK_JOURNAL} from "../routes.ts";
+import {useUserStore} from "../stores/userStore.ts";
+import type {IUser} from "../models/user.ts";
+const { checkPIN } = useUserStore()
 
 const phone = ref("")
 const pin = ref("")
@@ -48,6 +54,7 @@ const step = ref(STEP_INPUT_PHONE)
 const loading = ref(false)
 const isAllowResendPIN = ref(true)
 const pinResendSecondsLeft = ref(PIN_RESEND_TIMEOUT)
+const router = useRouter()
 
 const isInputPhoneVisible = computed(() => {
   return step.value === STEP_INPUT_PHONE
@@ -59,11 +66,24 @@ const isInputPinVisible = computed(() => {
 const handlePhoneChange = (value: string) => {
   phone.value = value
   errorMessage.value = ""
+  if (value !== WebStorage.getLastPhone()) {
+    WebStorage.setLastPINSendDate("")
+  }
 }
 const handlePinCompleted = (value: string) => {
-  if (validate()) {
-
-  }
+  errorMessage.value = ""
+  loading.value = true
+    checkPIN(phone.value, pin.value).then((user: IUser) => {
+      WebStorage.setUser(user)
+    router.push({
+      name: ROUTE_NAME_WORK_JOURNAL
+    })
+  }).catch(() => {
+    errorMessage.value = "Введен неверный код"
+    pin.value = ""
+  }).finally(() => {
+    loading.value = false
+  })
 }
 const handlePinTimedOut = () => {
   pinResendSecondsLeft.value = 0
@@ -103,7 +123,6 @@ const handleResendPinClick = () => {
   sendPIN()
 }
 const sendPIN = () => {
-  loading.value = true
   pin.value = ""
   const lastPINSendDate = WebStorage.getLastPINSendDate()
   let renewPINDate = true
@@ -117,6 +136,12 @@ const sendPIN = () => {
     pinResendSecondsLeft.value = secondsLeft
     renewPINDate = false
   }
+  if (!renewPINDate) {
+    isAllowResendPIN.value = false
+    step.value = STEP_INPUT_PIN
+    return
+  }
+  loading.value = true
   SmsService.sendPIN(phone.value).then(() => {
     step.value = STEP_INPUT_PIN
     if (renewPINDate) {

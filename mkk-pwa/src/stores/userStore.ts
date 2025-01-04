@@ -8,7 +8,7 @@ import DateService from "../services/date-service.ts";
 
 interface State {
     user: Nullable<IUser>
-    isAuth: boolean
+    isAuth: boolean | undefined
     showSplash: boolean
 }
 
@@ -19,13 +19,14 @@ interface Getters extends _GettersTree<any> {
 
 interface Actions {
     init(): void
-    fetchUser(phone: string, pin: string): Promise<IUser | null>
+    fetchUser(phone: string, pin: string): Promise<IUser | null>,
+    checkPIN(phone: string, pin: string): Promise<IUser | null>
 }
 
 const useUserStore = defineStore<string, State, Getters, Actions>('user', {
     state: () => ({
         user: null,
-        isAuth: false,
+        isAuth: undefined,
         showSplash: true
     }),
     getters: {
@@ -62,8 +63,29 @@ const useUserStore = defineStore<string, State, Getters, Actions>('user', {
                     }
                 })
             })
+        },
+        checkPIN(phone: string, pin: string): Promise<IUser | null> {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (pin === '1111') {
+                        this.user = {
+                            id: 1,
+                            name: "Test user",
+                            phone: phone,
+                            authKey: {
+                                key: '32424235423645645645645',
+                                expired: DateService.addDays(new Date(), 1)
+                            }
+                        }
+                        this.isAuth = true
+                        resolve(this.user)
+                    } else {
+                        reject(null)
+                    }
+                }, 500)
+            })
         }
-    }
+}
 })
 
 export {
