@@ -30,4 +30,7 @@ export default class DateService {
     static formatDateForUI(date: Date | string) {
         return format(new Date(date), "dd.MM.yyyy HH:mm")
     }
+    static formatTime(date: Date | string) {
+        return format(new Date(date), "HH:mm")
+    }
 }

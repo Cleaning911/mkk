@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PlusIcon from "../icons/plus.vue";
+import CloseIcon from "../icons/close.vue";
 const emit = defineEmits(["click"])
 const handleClick = () => {
   emit("click")
@@ -7,16 +7,16 @@ const handleClick = () => {
 </script>
 <script lang="ts">
 export default {
-  name: "ButtonPlus"
+  name: "CloseButton"
 }
 </script>
 
 <template>
-  <plus-icon class="button-plus" @click="handleClick" />
+  <close-icon class="close-button" @click="handleClick" />
 </template>
 
 <style scoped lang="scss">
-.button-plus {
+.close-button {
   width: 40px;
   height: 40px;
   cursor: pointer;

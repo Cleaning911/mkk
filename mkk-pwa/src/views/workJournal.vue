@@ -1,19 +1,34 @@
 <script setup lang="ts">
 import ButtonPlus from "../components/button/plus.vue";
 import ButtonMenu from "../components/button/menu.vue";
-import {computed} from "vue";
+import {computed, onMounted} from "vue";
 import DateService from "../services/date-service.ts";
 import WorkJournalList from "../components/workJournal/list.vue";
+import {useRouter} from "vue-router";
+import {useVisitStore} from "../stores/visitStore.ts";
 const props = defineProps({
   date: {
     type: [Date, String]
   }
 })
+const router = useRouter()
+const { fetchVisits } = useVisitStore()
 const propDate = computed(() => {
   return props.date ? new Date(props.date) : new Date()
 })
 const dateStr = computed(() => {
   return DateService.getDateHumanStr(propDate.value)
+})
+const handleNewVisitClick = () => {
+  router.push({
+    name: "visit",
+    params: {
+      id: "new"
+    }
+  })
+}
+onMounted(() => {
+  fetchVisits(props.date)
 })
 </script>
 
@@ -28,7 +43,7 @@ export default {
     <div class="work-journal__head">
       <button-menu />
       <span>{{ dateStr }}</span>
-      <button-plus />
+      <button-plus @click="handleNewVisitClick" />
     </div>
     <div class="work-journal__content">
       <work-journal-list />

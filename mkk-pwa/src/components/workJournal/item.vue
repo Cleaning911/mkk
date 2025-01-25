@@ -1,17 +1,28 @@
 <script setup lang="ts">
 import type {PropType} from "vue";
-import type {IWorkJournal} from "../../models/workJournal.ts";
+import type {IVisit} from "../../models/visit.ts";
 import {computed} from "vue";
 import DateService from "../../services/date-service.ts";
+import {useRouter} from "vue-router";
+import {routes} from "../../routes.ts";
 
 const props = defineProps({
   workJournal: {
-    type: Object as PropType<IWorkJournal>
+    type: Object as PropType<IVisit>
   }
 })
+const router = useRouter()
 const formattedCreationDate = computed(() => {
   return props.workJournal ? DateService.formatDateForUI(props.workJournal.dtCreate) : "Дата создания неизвестна"
 })
+const handleItemClick = () => {
+  router.push({
+    name: "visit",
+    params: {
+      id: props.workJournal?.id || "new"
+    }
+  })
+}
 </script>
 <script lang="ts">
 export default {
@@ -20,7 +31,7 @@ export default {
 </script>
 
 <template>
-  <div class="work-journal-item">
+  <div class="work-journal-item" @click="handleItemClick">
     <span class="work-journal-item__object">{{ workJournal.objectName }}</span>
     <span class="work-journal-item__address">{{ workJournal.address }}</span>
     <div class="work-journal-item__footer">

@@ -40,6 +40,7 @@ export default {
     background-color: var(--bk-button-disabled);
     color: var(--text-button-disabled);
     border: var(--border-button-disabled);
+//    box-shadow: 0 0 4px 0 #bfbfbf;
     cursor: default;
     pointer-events: none;
   }

@@ -1,12 +1,16 @@
 :root {
   --border-input: 1px solid #e6e6e6;
+  --border-input--focus: 1px solid #6fa9bf;
   --border-button: 1px solid #7eb402;
-  --border-button-disabled: 1px solid #bfbfbf;
+  --border-button-disabled: 1px solid #e4e4e4;
+  --border-button-photo: 1px solid #6fa9bf;
   --border-error: 1px solid #e54702;
   --border-info: 4px double #6fa9bf;
   --border-divide: 1px dashed #00000030;
   --text-error: #e54702;
   --text-input: #4f4f4f;
+  --bk-base: #ffffff;
+  --bk--dark: #000000;
   --bk-button: #8bc603;
   --bk-button-disabled: #e4e4e4;
   --text-button: #fff;
@@ -16,6 +20,8 @@
   --text-timer: #487a8c;
   --text-default: #00000095;
   --text-secondary: #00000080;
+  --bk-icon: #487a8c;
+  --bk-button-secondary: #6fa9bf;
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

@@ -49,7 +49,7 @@ const useUserStore = defineStore<string, State, Getters, Actions>('user', {
                 }
                 this.isAuth = !!this.user
                 this.showSplash = false
-            }, 2000)
+            }, 500)
         },
         fetchUser(phone: string, pin: string): Promise<Nullable<IUser>> {
             return new Promise((resolve) => {
