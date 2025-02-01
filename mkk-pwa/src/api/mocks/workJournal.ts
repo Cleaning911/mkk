@@ -1,5 +1,6 @@
 import type {IVisitList} from "../../models/visit.ts";
 import type {IPhotoList} from "../../models/photo.ts";
+import {SAVE_STATUS_GOT_FROM_SERVER} from "../../stores/consts.ts";
 
 export default [
     {
@@ -21,6 +22,7 @@ export default [
                 url: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/thumbs/638721139381135049.jpg",
                 thumbnailURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/thumbs/638721139381135049.jpg",
                 largeURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/thumbs/638721139381135049.jpg",
+                status: SAVE_STATUS_GOT_FROM_SERVER
             },
             {
                 id: 2,
@@ -28,6 +30,7 @@ export default [
                 url: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/thumbs/638721139371831901.jpg",
                 thumbnailURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/thumbs/638721139371831901.jpg",
                 largeURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/thumbs/638721139371831901.jpg",
+                status: SAVE_STATUS_GOT_FROM_SERVER
             },
             {
                 id: 3,
@@ -35,6 +38,7 @@ export default [
                 url: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721138556719839.jpg",
                 thumbnailURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721138556719839.jpg",
                 largeURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721138556719839.jpg",
+                status: SAVE_STATUS_GOT_FROM_SERVER
             },
             {
                 id: 4,
@@ -42,6 +46,7 @@ export default [
                 url: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721139276793950.jpg",
                 thumbnailURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721139276793950.jpg",
                 largeURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721139276793950.jpg",
+                status: SAVE_STATUS_GOT_FROM_SERVER
             }
         ] as IPhotoList
     },
@@ -74,6 +79,7 @@ export default [
             url: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721138556719839.jpg",
             thumbnailURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721138556719839.jpg",
             largeURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721138556719839.jpg",
+            status: SAVE_STATUS_GOT_FROM_SERVER
         },
             {
                 id: 4,
@@ -81,6 +87,7 @@ export default [
                 url: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721139276793950.jpg",
                 thumbnailURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721139276793950.jpg",
                 largeURL: "https://cleaningwjmedia.s3.yandexcloud.net/2025/1/10/111458/638721139276793950.jpg",
+                status: SAVE_STATUS_GOT_FROM_SERVER
             }
         ]
     },

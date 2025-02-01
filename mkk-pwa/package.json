@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@types/photoswipe": "^4.1.6",
+    "@vueuse/core": "^12.5.0",
+    "axios": "^1.7.9",
     "date-fns": "^4.1.0",
     "photoswipe": "^5.4.4",
     "pinia": "^2.3.0",
@@ -17,7 +19,8 @@
     "uniqid": "^5.4.0",
     "v-pin-input": "^1.0.1",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "ymaps": "^0.2.1"
   },
   "devDependencies": {
     "@types/uniqid": "^5.3.4",

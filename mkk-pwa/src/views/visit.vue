@@ -16,6 +16,9 @@ import InputText from "../components/input/text.vue";
 import AddPhotoButton from "../components/button/addPhoto.vue";
 import AppendPhotoButton from "../components/button/appendPhoto.vue";
 import SimpleCamera from "../components/camera/simple.vue";
+import {SAVE_STATUS_NEW} from "../stores/consts.ts";
+import { useGeolocation } from "@vueuse/core";
+
 const props = defineProps({
 })
 const localVisit = ref({
@@ -32,6 +35,7 @@ const router = useRouter()
 const { fetchVisit } = useVisitStore()
 const finishVisitOnSave = ref(false)
 const openCamera = ref(false)
+const { coords, locatedAt, error, resume, pause } = useGeolocation()
 const id = computed(() => {
   const _id = router.currentRoute.value.params["id"].toString()
   return _id === 'new' || !parseInt(_id) ? 0 : (Number)(_id)
@@ -72,17 +76,10 @@ const photos = computed(() => {
 const isAllowAddPhoto = computed(() => {
   return !isVisitFinished.value
 })
-const snapshot = async () => {
-  console.log('camera', camera.value)
-  const blob = await camera.value?.snapshot();
-
-  const url = URL.createObjectURL(blob);
-  console.log(url)
-}
 watch(id, () => {
   if (id.value) {
     fetchVisit(id.value).then((visitData) => {
-      localVisit.value = visitData
+      localVisit.value = { ...visitData }
     })
   }
 }, {
@@ -100,9 +97,29 @@ const handleAddPhotoClick = () => {
   openCamera.value = true
 }
 const handleGotCameraPhoto = (url: string, blob: Blob) => {
-  console.log(url)
-  console.log(blob)
   openCamera.value = false
+  addPhotoToGallery(url, blob)
+}
+const addPhotoToGallery = async (url: string, blob: Blob) => {
+  const bmp = await createImageBitmap(blob)
+  if (localVisit.value && !localVisit.value?.photos) {
+    localVisit.value.photos = []
+  }
+  if (localVisit?.value?.photos) {
+    localVisit.value.photos.push({
+      id: 0,
+      title: "New",
+      url: url,
+      thumbnailURL: url,
+      largeURL: url,
+      status: SAVE_STATUS_NEW,
+      width: bmp?.width,
+      height: bmp?.height
+    })
+  }
+  if (bmp) {
+    bmp.close()
+  }
 }
 const handleCloseCamera = () => {
   openCamera.value = false
@@ -132,6 +149,10 @@ export default {
         <label>Адрес</label>
         <input-text v-if="isNew" :value="localVisit?.address" @change="localVisit.address = $event" />
         <span v-else>{{ localVisit?.address || '-' }}</span>
+        <div class="visit__geolocation">
+          <span>({{ coords?.latitude || '-' }}, </span>
+          <span>{{ coords?.longitude || '-' }})</span>
+        </div>
         <label>Время прибытия</label>
         <span>{{ arrivalTime }}</span>
         <template v-if="leaveTime">
@@ -216,6 +237,11 @@ export default {
   }
 
   &__append-photo {
+  }
+
+  &__geolocation {
+    font-size: 12px;
+    color: var(--text-secondary);
   }
 }
 #visitPhotos {

@@ -142,7 +142,7 @@ const sendPIN = () => {
     return
   }
   loading.value = true
-  SmsService.sendPIN(phone.value).then(() => {
+  AuthService.sendPIN(phone.value).then(() => {
     step.value = STEP_INPUT_PIN
     if (renewPINDate) {
       storeVariables()

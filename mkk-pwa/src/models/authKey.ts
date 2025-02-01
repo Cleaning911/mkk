@@ -4,5 +4,5 @@ interface IAuthKey {
 }
 
 export {
-    IAuthKey
+    type IAuthKey
 }

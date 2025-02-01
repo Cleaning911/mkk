@@ -3,7 +3,7 @@ import type {IUser} from "../models/user.ts";
 import {defineStore} from "pinia";
 import type {Nullable} from "../models/types.ts";
 import WebStorage from "./webStorage.ts";
-import AuthService from "../services/auth-service.ts";
+import AuthService from "../api/auth-service.ts";
 import DateService from "../services/date-service.ts";
 
 interface State {
@@ -40,9 +40,9 @@ const useUserStore = defineStore<string, State, Getters, Actions>('user', {
     actions: {
         init() {
             this.showSplash = true
-            setTimeout(() => {
+            setTimeout(async () => {
                 const storedUser = WebStorage.getUser()
-                if (storedUser && AuthService.isAuthKeyAlive(storedUser)) {
+                if (storedUser && await AuthService.isAuthKeyAlive(storedUser)) {
                     this.user = storedUser
                 } else {
                     this.user = null
