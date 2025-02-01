@@ -88,6 +88,14 @@ button:focus-visible {
   text-align: center;
 }
 
+body {
+    background-color: var(--bk-base);
+}
+
+input, select {
+    background-color: var(--bk-base);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

@@ -17,17 +17,17 @@ export default class AuthService {
     static async sendPIN(phone: string) {
         return new Promise(async (resolve, reject) => {
             if (phone) {
-                const response = await axios.post(API_AUTH_PATH, {
-                    type: "sendAuthSMSCode",
-                    sms_phone: CryptoService.hidePhoneNumber(`7${phone}`),
-                    auth_key: CryptoService.hidePhoneNumber(phone)
-                })
-                if (HttpService.isSuccessResponse(response)) {
-                    resolve(true)
-                } else {
-                    reject("Ошибка при отправке сообщения с кодом.")
-                    console.log("sendPIN", response?.data?.error)
-                }
+              const response = await HttpService.post(API_AUTH_PATH, {
+                type: "sendAuthSMSCode",
+                sms_phone: CryptoService.hidePhoneNumber(`7${phone}`),
+                auth_key: CryptoService.hidePhoneNumber(phone)
+              })
+              if (HttpService.isSuccessResponse(response)) {
+                  resolve(true)
+              } else {
+                  reject("Ошибка при отправке сообщения с кодом.")
+                  console.log("sendPIN", response?.data?.error)
+              }
             } else {
                 reject("Телефон не указан")
             }

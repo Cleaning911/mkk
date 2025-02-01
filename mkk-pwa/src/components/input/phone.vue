@@ -61,5 +61,12 @@ export default {
   & > input {
     min-width: 200px;
   }
+
+  & input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
 }
 </style>
