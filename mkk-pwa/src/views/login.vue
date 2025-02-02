@@ -20,11 +20,6 @@
 
 
 <script setup lang="ts">
-import {PinInput} from "v-pin-input";
-
-const STEP_INPUT_PHONE = 1
-const STEP_INPUT_PIN = 2
-const PIN_RESEND_TIMEOUT = 300
 
 import WebStorage from "../stores/webStorage.ts";
 import InputPhone from "../components/input/phone.vue";
@@ -34,7 +29,6 @@ import ErrorText from "../components/error/text.vue";
 import {computed, onMounted, ref} from "vue";
 import InputPin from "../components/input/pin.vue";
 import InputLink from "../components/input/link.vue";
-import SmsService from "../api/sms-service.ts";
 import LoadingBlur from "../components/loading/blur.vue";
 import "./login.vue";
 import InfoText from "../components/info/text.vue";
@@ -45,6 +39,13 @@ import {useRouter} from "vue-router";
 import {ROUTE_NAME_WORK_JOURNAL} from "../routes.ts";
 import {useUserStore} from "../stores/userStore.ts";
 import type {IUser} from "../models/user.ts";
+import CryptoService from "../services/crypto-service.ts";
+import type {IAuthKey} from "../models/authKey.ts";
+
+const STEP_INPUT_PHONE = 1
+const STEP_INPUT_PIN = 2
+const PIN_RESEND_TIMEOUT = 300
+
 const { checkPIN } = useUserStore()
 
 const phone = ref("")
@@ -70,11 +71,17 @@ const handlePhoneChange = (value: string) => {
     WebStorage.setLastPINSendDate("")
   }
 }
-const handlePinCompleted = (value: string) => {
+const handlePinCompleted = () => {
   errorMessage.value = ""
   loading.value = true
-    checkPIN(phone.value, pin.value).then((user: IUser) => {
-      WebStorage.setUser(user)
+  AuthService.checkPIN(`7${phone.value}`, pin.value).then(() => {
+    WebStorage.setUser({
+      phone: phone.value,
+      authKey: {
+        key: CryptoService.hidePhoneNumber(`7${phone.value}`) || "",
+        expired: DateService.addDays(new Date(), 7)
+      } as IAuthKey
+    } as IUser)
     router.push({
       name: ROUTE_NAME_WORK_JOURNAL
     })

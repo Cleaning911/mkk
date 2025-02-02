@@ -42,7 +42,7 @@ const useUserStore = defineStore<string, State, Getters, Actions>('user', {
             this.showSplash = true
             setTimeout(async () => {
                 const storedUser = WebStorage.getUser()
-                if (storedUser && await AuthService.isAuthKeyAlive(storedUser)) {
+                if (storedUser && storedUser.authKey?.key && !DateService.isPastDate(storedUser.authKey.expired) && await AuthService.isAuthKeyAlive(storedUser)) {
                     this.user = storedUser
                 } else {
                     this.user = null
@@ -66,6 +66,7 @@ const useUserStore = defineStore<string, State, Getters, Actions>('user', {
         },
         checkPIN(phone: string, pin: string): Promise<IUser | null> {
             return new Promise((resolve, reject) => {
+
                 setTimeout(() => {
                     if (pin === '1111') {
                         this.user = {

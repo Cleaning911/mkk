@@ -33,4 +33,7 @@ export default class DateService {
     static formatTime(date: Date | string) {
         return format(new Date(date), "HH:mm")
     }
+    static isPastDate(date: Date | string) {
+        return new Date(date) < new Date()
+    }
 }

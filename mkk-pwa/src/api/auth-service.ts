@@ -6,11 +6,8 @@ const API_AUTH_PATH = "/api/auth/service.ashx";
 export default class AuthService {
     static async isAuthKeyAlive(user: IUser) {
         if (user?.authKey) {
-            const response = await axios.get(`${API_AUTH_PATH}?type=getUser&auth_key=${user.authKey}`)
-            return !response || !response.data || !response.data.error
-            // if (!user.authKey.expired || new Date(user.authKey.expired) >= new Date()) {
-            //     return true
-            // }
+            const response = await axios.get(`${API_AUTH_PATH}?type=getUser&auth_key=${user.authKey.key}`)
+            return HttpService.isSuccessResponse(response)
         }
         return false
     }
@@ -30,6 +27,29 @@ export default class AuthService {
               }
             } else {
                 reject("Телефон не указан")
+            }
+        })
+    }
+    static checkPIN(phone: string, pin: string) {
+        return new Promise(async (resolve, reject) => {
+            if (!phone) {
+                reject("Не указан номер телефона")
+                return
+            }
+            if (!pin) {
+                reject("Не указан код из СМС")
+                return
+            }
+            const response = await HttpService.post(API_AUTH_PATH, {
+                type: "checkSMSCode",
+                sms_code: pin,
+                sms_phone: CryptoService.hidePhoneNumber(phone),
+                auth_key: CryptoService.hidePhoneNumber(phone)
+            })
+            if (HttpService.isSuccessResponse(response)) {
+                resolve(true)
+            } else {
+                reject("Неверный код")
             }
         })
     }
