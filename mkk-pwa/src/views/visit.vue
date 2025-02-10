@@ -18,6 +18,8 @@ import AppendPhotoButton from "../components/button/appendPhoto.vue";
 import SimpleCamera from "../components/camera/simple.vue";
 import {SAVE_STATUS_NEW} from "../stores/consts.ts";
 import { useGeolocation } from "@vueuse/core";
+import InputClientObject from "../components/input/clientObject.vue";
+import type {IObject} from "../models/object.ts";
 
 const props = defineProps({
 })
@@ -124,6 +126,9 @@ const addPhotoToGallery = async (url: string, blob: Blob) => {
 const handleCloseCamera = () => {
   openCamera.value = false
 }
+const handleClientObjectSelect = (object: IObject) => {
+  console.log(object)
+}
 </script>
 <script lang="ts">
 export default {
@@ -141,7 +146,8 @@ export default {
     <div class="visit__scroll">
       <div class="visit__common">
         <label>Объект</label>
-        <input-text v-if="isNew" :value="localVisit?.objectName" @change="localVisit.objectName = $event" />
+        <input-client-object v-if="isNew" @select="handleClientObjectSelect" />
+        <input-text v-if="false" :value="localVisit?.objectName" @change="localVisit.objectName = $event" />
         <span v-else>{{ localVisit?.objectName || '' }}</span>
         <label>Организация</label>
         <input-text v-if="isNew" :value="localVisit?.client?.clientName" :disabled="true" />

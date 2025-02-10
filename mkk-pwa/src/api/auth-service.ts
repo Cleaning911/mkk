@@ -2,6 +2,7 @@ import type { IUser } from "../models/user.ts";
 import axios from "axios";
 import CryptoService from "../services/crypto-service.ts";
 import HttpService from "../services/http-service.ts";
+import WebStorage from "../stores/webStorage.ts";
 const API_AUTH_PATH = "/api/auth/service.ashx";
 export default class AuthService {
     static async isAuthKeyAlive(user: IUser) {
@@ -52,5 +53,8 @@ export default class AuthService {
                 reject("Неверный код")
             }
         })
+    }
+    static logout() {
+        WebStorage.setUser(null)
     }
 }

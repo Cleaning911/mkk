@@ -27,6 +27,9 @@ export default class DateService {
     static isToday(date: Date | string) {
         return this.formatDate(date) === this.formatDate(new Date())
     }
+    static formatDateForAPI(date: Date | string) {
+        return format(new Date(date), "yyyy-MM-dd")
+    }
     static formatDateForUI(date: Date | string) {
         return format(new Date(date), "dd.MM.yyyy HH:mm")
     }

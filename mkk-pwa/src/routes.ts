@@ -2,6 +2,7 @@ import HomePage from "./views/home.vue"
 import LoginPage from "./views/login.vue"
 import WorkJournal from "./views/workJournal.vue";
 import Visit from "./views/visit.vue";
+import Logout from "./views/logout.vue";
 
 const ROUTE_NAME_LOGIN = "login"
 const ROUTE_NAME_WORK_JOURNAL = "workJournal"
@@ -26,6 +27,11 @@ const routes = [
         name: "visit",
         path: "/work-journal/:id",
         component: Visit
+    },
+    {
+        name: "logout",
+        path: "/logout",
+        component: Logout
     }
 ] as any
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div id="app" class="app">
     <splash v-if="getShowSplash" />
     <router-view v-else />
   </div>

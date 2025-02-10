@@ -14,6 +14,6 @@ interface IPhoto {
 interface IPhotoList extends Array<IPhoto> {}
 
 export {
-    IPhoto,
-    IPhotoList
+    type IPhoto,
+    type IPhotoList
 }

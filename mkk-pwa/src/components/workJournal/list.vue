@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import {ref, toRefs} from "vue";
+import {computed, ref, toRefs} from "vue";
 import type {IVisitList} from "../../models/visit.ts";
 import WorkJournalItem from "./item.vue";
 import {useVisitStore} from "../../stores/visitStore.ts";
 
 const { getVisitList } = toRefs(useVisitStore())
+const isNoVisits = computed(() => {
+  return !getVisitList.value?.length
+})
+
 </script>
 <script lang="ts">
 export default {
@@ -14,7 +18,11 @@ export default {
 
 <template>
   <div class="work-journal-list">
+    <div v-if="isNoVisits" class="work-journal-list__empty">
+      <span class="work-journal-list__empty__text">Посещения  отсутствуют</span>
+    </div>
     <work-journal-item
+      v-else
       v-for="item in getVisitList"
       :key="`work-journal-item-${item.id}`"
       :work-journal="item"
@@ -24,7 +32,19 @@ export default {
 
 <style scoped lang="scss">
 .work-journal-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr;
+  height: 100%;
+
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+
+    &__text {
+      margin-top: -100px;
+    }
+  }
 }
 </style>

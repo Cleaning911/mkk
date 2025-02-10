@@ -13,6 +13,8 @@
   --bk--dark: #000000;
   --bk-button: #8bc603;
   --bk-button-disabled: #e4e4e4;
+  --bk-menu: #00000099;
+  --text-menu: #fff;
   --text-button: #fff;
   --text-button-disabled: #bfbfbf;
   --text-link: #02a7e5;
@@ -22,6 +24,7 @@
   --text-secondary: #00000080;
   --bk-icon: #487a8c;
   --bk-button-secondary: #6fa9bf;
+
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -83,7 +86,7 @@ button:focus-visible {
 }
 
 #app {
-  max-width: 1280px;
+  max-width: 1024px;
   margin: 0 auto;
   text-align: center;
 }
