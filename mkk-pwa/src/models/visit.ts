@@ -6,7 +6,7 @@ interface IVisit {
     objectName: string
     client?: IClient
     address?: string
-    dtCreate?: Date | string
+    dtCreate?: Date | string | null
     photoCount?: number
     photos?: IPhotoList
     isCompleted?: boolean

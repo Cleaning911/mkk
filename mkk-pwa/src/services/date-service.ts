@@ -39,4 +39,9 @@ export default class DateService {
     static isPastDate(date: Date | string) {
         return new Date(date) < new Date()
     }
+    static localeDateToDate(ddMMyyyy: string) {
+        const dateArray = ddMMyyyy.substring(0, 10).split(".").map(x => (Number(x)))
+        const timeStr = ddMMyyyy.substring(10, ddMMyyyy.length).trim()
+        return new Date(`${dateArray[2]}-${dateArray[1]}-${dateArray[0]} ${timeStr}`)
+    }
 }
