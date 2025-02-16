@@ -8,11 +8,7 @@ export default class VisitService {
   static async fetchVisitList(user: IUser, dateFrom: Date | string | null, dateTo: Date | string | null) {
     try {
       const response = await axios.get(
-        `${API_VISIT_PATH}?
-        type=getQMWorkJournal&
-        auth_key=${user?.authKey?.key}&
-        dtFrom=${DateService.formatDateForAPI(dateFrom || new Date())}&
-        dtTo=${DateService.formatDateForAPI(dateTo || new Date())}`
+        `${API_VISIT_PATH}?type=getQMWorkJournal&auth_key=${user?.authKey?.key}&dtFrom=${DateService.formatDateForAPI(dateFrom || new Date())}&dtTo=${DateService.formatDateForAPI(dateTo || new Date())}`
       )
       if (HttpService.isSuccessResponse(response)) {
         return response.data
