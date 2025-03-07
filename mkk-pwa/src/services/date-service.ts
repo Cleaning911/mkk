@@ -10,7 +10,12 @@ export default class DateService {
         return format(new Date(date), "yyyy-MM-dd HH:mm:ss")
     }
     static formatDate(date: Date | string) {
-        return format(new Date(date), "dd.MM.yyyy")
+        try {
+            return format(new Date(date), "dd.MM.yyyy")
+        } catch (e) {
+            console.log('formatDate', e)
+            return date
+        }
     }
     static getTimePartStr(timePart: number) {
         return timePart >= 10 ? timePart.toString() : `0${timePart}`
@@ -39,9 +44,20 @@ export default class DateService {
     static isPastDate(date: Date | string) {
         return new Date(date) < new Date()
     }
-    static localeDateToDate(ddMMyyyy: string) {
-        const dateArray = ddMMyyyy.substring(0, 10).split(".").map(x => (Number(x)))
-        const timeStr = ddMMyyyy.substring(10, ddMMyyyy.length).trim()
+    static localeDateToDate(ddMMyyyy: string | Date) {
+        if (!ddMMyyyy) {
+            return ddMMyyyy
+        }
+        const dateArray = ddMMyyyy.toString().substring(0, 10).split(".")
+        const timeStr = ddMMyyyy.toString().substring(10, ddMMyyyy.toString().length).trim()
         return new Date(`${dateArray[2]}-${dateArray[1]}-${dateArray[0]} ${timeStr}`)
+    }
+    static fixAPIDate(date: Date | string) {
+        if (!date) {
+            return date
+        }
+        const dateArr = date.toString().substring(0, 10).split('.')
+        const timeStr = date.toString().substring(11, date.toString().length).trim()
+        return new Date(`${dateArr[2]}-${dateArr[1]}-${dateArr[0]} ${timeStr}`)
     }
 }

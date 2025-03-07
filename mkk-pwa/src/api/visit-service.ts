@@ -8,34 +8,55 @@ import type {IAPIVisit} from "../models/api/visit.ts";
 
 const API_VISIT_PATH = "/api/quality/service.ashx"
 export default class VisitService {
+  static APIVisitToVisit(apiVisit: IAPIVisit) {
+    return {
+      id: apiVisit.id,
+      objectName: apiVisit.ObjectName,
+      client: {
+        id: apiVisit.idClientObject,
+        clientName: apiVisit.ClientName
+      },
+      firmName: apiVisit.ClientName,
+      address: apiVisit.LocationAddress,
+      dtCreate: apiVisit.dtCreate ? DateService.localeDateToDate(apiVisit.dtCreate.toString()) : null,
+      photoCount: (Number)(apiVisit.PhotoCount),
+      photos: [],
+      isCompleted: !!apiVisit.dtLeave,
+      dtCome: apiVisit.dtCome ? DateService.localeDateToDate(apiVisit.dtCome.toString()) : null,
+      dtLeave: apiVisit.dtLeave ? DateService.localeDateToDate(apiVisit.dtLeave.toString()) : null,
+    } as IVisit
+  }
   static async fetchVisitList(user: IUser, dateFrom: Date | string | null, dateTo: Date | string | null) {
     try {
+      dateFrom = '2023-01-01'
       const response = await axios.get(
         `${API_VISIT_PATH}?type=getQMWorkJournal&auth_key=${user?.authKey?.key}&dtFrom=${DateService.formatDateForAPI(dateFrom || new Date())}&dtTo=${DateService.formatDateForAPI(dateTo || new Date())}`
       )
       if (HttpService.isSuccessResponse(response)) {
         return (response.data ? response.data.map((x: IAPIVisit) => {
-          return {
-            id: x.id,
-            objectName: x.ObjectName,
-            client: {
-              id: x.idClientObject,
-              clientName: x.ClientName
-            },
-            address: x.LocationAddress,
-            dtCreate: x.dtCreate ? DateService.localeDateToDate(x.dtCreate.toString()) : null,
-            photoCount: (Number)(x.PhotoCount),
-            photos: [],
-            isCompleted: !!x.dtLeave,
-            dtCome: x.dtCome ? DateService.localeDateToDate(x.dtCome.toString()) : null,
-            dtLeave: x.dtLeave ? DateService.localeDateToDate(x.dtLeave.toString()) : null,
-          } as IVisit
+          return this.APIVisitToVisit(x)
         }) : []) as IVisitList
       } else {
         return false
       }
     } catch (e) {
       return false
+    }
+  }
+  static async fetchVisit(user: IUser, id: number) {
+    try {
+      const response = await axios.get(
+        `${API_VISIT_PATH}?type=getQMWorkJournal&auth_key=${user?.authKey?.key}&id=${id}`
+      )
+      if (HttpService.isSuccessResponse(response)) {
+        return (response.data ? response.data.map((x: IAPIVisit) => {
+          return this.APIVisitToVisit(x)
+        }) : []) as IVisitList
+      } else {
+        return []
+      }
+    } catch (e) {
+      return []
     }
   }
 }

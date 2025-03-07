@@ -34,7 +34,7 @@ export default {
 .work-journal-list {
   display: grid;
   grid-template-rows: 1fr;
-  height: 100%;
+  //height: 100%;
 
   &__empty {
     display: flex;

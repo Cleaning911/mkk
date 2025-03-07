@@ -98,6 +98,9 @@ body {
 input, select {
     background-color: var(--bk-base);
 }
+select[disabled], input[disabled] {
+  color: var(--text-button-disabled);
+}
 
 @media (prefers-color-scheme: light) {
   :root {

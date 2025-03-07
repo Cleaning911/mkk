@@ -20,12 +20,15 @@ import {SAVE_STATUS_NEW} from "../stores/consts.ts";
 import { useGeolocation } from "@vueuse/core";
 import InputClientObject from "../components/input/clientObject.vue";
 import type {IObject} from "../models/object.ts";
+import {useUserStore} from "../stores/userStore.ts";
+import LoadingBlur from "../components/loading/blur.vue";
 
 const props = defineProps({
 })
 const localVisit = ref({
   id: 0,
   objectName: '',
+  firmName: '',
   address: '',
   photos: [],
   photoCount: 0,
@@ -38,12 +41,15 @@ const { fetchVisit } = useVisitStore()
 const finishVisitOnSave = ref(false)
 const openCamera = ref(false)
 const { coords, locatedAt, error, resume, pause } = useGeolocation()
+const { user } = useUserStore()
+const loading = ref(false)
+
 const id = computed(() => {
   const _id = router.currentRoute.value.params["id"].toString()
-  return _id === 'new' || !parseInt(_id) ? 0 : (Number)(_id)
+  return _id === 'new' || isNaN(parseInt(_id)) ? 0 : (Number)(_id)
 })
 const isNew = computed(() => {
-  return !localVisit.value?.id
+  return !id?.value
 })
 const title = computed(() => {
   return !isNew.value ? `#${localVisit.value?.id} от ${DateService.formatDate(localVisit.value?.dtCreate)}` : "Новый визит"
@@ -80,8 +86,17 @@ const isAllowAddPhoto = computed(() => {
 })
 watch(id, () => {
   if (id.value) {
-    fetchVisit(id.value).then((visitData) => {
-      localVisit.value = { ...visitData }
+    loading.value = true
+    fetchVisit(user, id.value).then((visitData) => {
+      localVisit.value = {
+        ...visitData,
+        dtCome: DateService.localeDateToDate(visitData.dtCome || ''),
+        dtLeave: DateService.localeDateToDate(visitData.dtLeave || ''),
+        dtCreate: DateService.localeDateToDate(visitData.dtCreate || ''),
+        firmName: visitData.client?.clientName || ''
+      }
+    }).finally(() => {
+      loading.value = false
     })
   }
 }, {
@@ -128,6 +143,10 @@ const handleCloseCamera = () => {
 }
 const handleClientObjectSelect = (object: IObject) => {
   console.log(object)
+  if (object && localVisit.value) {
+    localVisit.value.firmName = object.firmName
+    localVisit.value.address = object.address
+  }
 }
 </script>
 <script lang="ts">
@@ -150,8 +169,8 @@ export default {
         <input-text v-if="false" :value="localVisit?.objectName" @change="localVisit.objectName = $event" />
         <span v-else>{{ localVisit?.objectName || '' }}</span>
         <label>Организация</label>
-        <input-text v-if="isNew" :value="localVisit?.client?.clientName" :disabled="true" />
-        <span v-else>{{ localVisit?.client?.clientName || '-' }}</span>
+        <input-text v-if="isNew" :value="localVisit?.firmName" :disabled="true" />
+        <span v-else>{{ localVisit?.firmName || '-' }}</span>
         <label>Адрес</label>
         <input-text v-if="isNew" :value="localVisit?.address" @change="localVisit.address = $event" />
         <span v-else>{{ localVisit?.address || '-' }}</span>
@@ -177,6 +196,7 @@ export default {
       <button-default :disabled="!isAllowSave" @click="handleSaveClick">{{ saveButtonTitle }}</button-default>
     </div>
     <simple-camera v-if="openCamera" @got-photo="handleGotCameraPhoto" @close="handleCloseCamera" />
+    <loading-blur v-if="loading" />
   </div>
 </template>
 

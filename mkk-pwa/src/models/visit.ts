@@ -4,6 +4,7 @@ import type {IPhoto, IPhotoList} from "./photo.ts";
 interface IVisit {
     id: number
     objectName: string
+    firmName: string
     client?: IClient
     address?: string
     dtCreate?: Date | string | null
@@ -17,6 +18,6 @@ interface IVisit {
 interface IVisitList extends Array<IVisit> {}
 
 export {
-    IVisit,
-    IVisitList
+    type IVisit,
+    type IVisitList
 }

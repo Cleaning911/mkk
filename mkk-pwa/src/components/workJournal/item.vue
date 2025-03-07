@@ -67,6 +67,7 @@ export default {
 
   &__address {
     color: var(--text-default);
+    text-align: left;
   }
 
   &__footer {

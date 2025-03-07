@@ -20,7 +20,7 @@ interface Getters extends _GettersTree<any> {
 
 interface Actions {
     fetchVisits(user: IUser | null, date: Date | string): Promise<IVisitList>
-    fetchVisit(id: number | string): Promise<IVisit>
+    fetchVisit(user: IUser, id: number): Promise<IVisit>
     fetchObjectList(user: IUser, id: number, isOnlyMy: boolean, search: string): Promise<IObjectList>
 }
 
@@ -42,11 +42,16 @@ const useVisitStore = defineStore<string, State, Getters, Actions>('visit', {
         }
     },
     actions: {
-        fetchVisit(id: number | string): Promise<IVisit> {
-            return new Promise((resolve, reject) => {
+        fetchVisit(user: IUser, id: number): Promise<IVisit> {
+            return new Promise(async (resolve, reject) => {
                 try {
                     this.isLoading = true
-                    resolve(workJournalMock.find(x => (Number)(x.id) === (Number)(id)))
+                    const data = await VisitService.fetchVisit(user, id)
+                    if (data?.length) {
+                        resolve(data[0])
+                    } else {
+                        reject(false)
+                    }
                 } catch (e: any) {
                     console.log('fetchVisit', e)
                     reject(e)
