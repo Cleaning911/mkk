@@ -7,14 +7,17 @@
   --border-error: 1px solid #e54702;
   --border-info: 4px double #6fa9bf;
   --border-divide: 1px dashed #00000030;
+  --border-menu: 1px dotted #00000080;
   --text-error: #e54702;
   --text-input: #4f4f4f;
   --bk-base: #ffffff;
   --bk--dark: #000000;
   --bk-button: #8bc603;
   --bk-button-disabled: #e4e4e4;
-  --bk-menu: #00000099;
-  --text-menu: #fff;
+  --bk-menu: #fff;
+  --bk-menu--selected: #02a7e580;
+  --text-menu: #000;
+  --text-menu--selected: #fff;
   --text-button: #fff;
   --text-button-disabled: #bfbfbf;
   --text-link: #02a7e5;
@@ -98,8 +101,20 @@ body {
 input, select {
     background-color: var(--bk-base);
 }
+input[type=search] {
+  background: var(--bk-button-disabled);
+  border-radius: 12px;
+  border: var(--border-input);
+  padding: 8px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
 select[disabled], input[disabled] {
   color: var(--text-button-disabled);
+}
+#mainMenu {
+  transform: none!important;
 }
 
 @media (prefers-color-scheme: light) {
